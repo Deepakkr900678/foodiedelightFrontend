@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { toast, Toaster } from "react-hot-toast";
 
 export default function Restaurant() {
     const [notice, setNotice] = useState(false);
@@ -14,7 +15,6 @@ export default function Restaurant() {
         location: "",
         contactNumber: "",
         openingHours: "",
-        restaurantImageUrl: null,
     });
     const [pagination, setPagination] = useState({
         currentPage: 1,
@@ -60,8 +60,7 @@ export default function Restaurant() {
                 "http://localhost:4500/api/v1/restaurant/createRestaurant",
                 formDataToSend
             );
-            console.log(response.data, "createRestaurant");
-            alert("Restaurant created successfully!");
+            toast.success("Restaurant Created Successfully!");
             setNotice(false);
             setFormData({
                 name: "",
@@ -79,14 +78,20 @@ export default function Restaurant() {
     };
 
     const handleDelete = async (id) => {
-        try {
-            await axios.delete(`http://localhost:4500/api/v1/restaurant/deleteRestaurantById/${id}`);
-            alert("Restaurant deleted successfully!");
-            getAllRestaurants();
-        } catch (error) {
-            console.error(error);
-            alert("Failed to delete restaurant. Please try again.");
+        const confirmDelete = window.confirm(
+            "Are you sure want to delete Restaurant?"
+        );
+        if (confirmDelete) {
+            try {
+                await axios.delete(`http://localhost:4500/api/v1/restaurant/deleteRestaurantById/${id}`);
+                toast.success("Restaurant Deleted Successfully!");
+                getAllRestaurants();
+            } catch (error) {
+                console.error(error);
+                alert("Failed to delete restaurant. Please try again.");
+            }
         }
+
     };
 
     const handleEditSubmit = async (e) => {
@@ -98,8 +103,7 @@ export default function Restaurant() {
 
         try {
             const response = await axios.patch(`http://localhost:4500/api/v1/restaurant/updateRestaurantById/${editId}`, formDataToSend);
-            console.log(response.data);
-            alert("Restaurant updated successfully!");
+            toast.success("Restaurant Update Successfully!");
             setShowEdit(false);
             getAllRestaurants();
         } catch (error) {
@@ -134,6 +138,8 @@ export default function Restaurant() {
     return (
         <>
             <div className="p-4 flex flex-col items-center">
+                <Toaster position="top-center" />
+                
                 <div className="container flex justify-center w-full flex-col border rounded-lg shadow-md p-4">
                     <div className="flex gap-2 p-4 self-end">
                         <button
@@ -288,15 +294,6 @@ export default function Restaurant() {
                                     className="border p-2 rounded w-full"
                                 />
                             </div>
-                            <div className="mb-4">
-                                <label className="block mb-1">Restaurant Image URL:</label>
-                                <input
-                                    type="file"
-                                    name="restaurantImageUrl"
-                                    onChange={handleChange}
-                                    className="border p-2 rounded w-full"
-                                />
-                            </div>
                             <div className="flex justify-end">
                                 <button
                                     type="button"
@@ -373,15 +370,6 @@ export default function Restaurant() {
                                     value={formData.openingHours}
                                     onChange={handleChange}
                                     required
-                                    className="border p-2 rounded w-full"
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block mb-1">Restaurant Image URL:</label>
-                                <input
-                                    type="file"
-                                    name="restaurantImageUrl"
-                                    onChange={handleChange}
                                     className="border p-2 rounded w-full"
                                 />
                             </div>
