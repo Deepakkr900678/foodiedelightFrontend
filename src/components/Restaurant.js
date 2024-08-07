@@ -27,7 +27,7 @@ export default function Restaurant() {
 
     const getAllRestaurants = async () => {
         try {
-            const response = await axios.get(`http://localhost:4500/api/v1/restaurant/getAllRestaurants?page=${pagination.currentPage}&limit=10`);
+            const response = await axios.get(`https://foodiedelightbackend.onrender.com/api/v1/restaurant/getAllRestaurants?page=${pagination.currentPage}&limit=10`);
             setAllRestaurants(response.data.restaurants);
             setFilteredRestaurants(response.data.restaurants);
             setPagination({
@@ -57,7 +57,7 @@ export default function Restaurant() {
 
         try {
             const response = await axios.post(
-                "http://localhost:4500/api/v1/restaurant/createRestaurant",
+                "https://foodiedelightbackend.onrender.com/api/v1/restaurant/createRestaurant",
                 formDataToSend
             );
             toast.success("Restaurant Created Successfully!");
@@ -83,7 +83,7 @@ export default function Restaurant() {
         );
         if (confirmDelete) {
             try {
-                await axios.delete(`http://localhost:4500/api/v1/restaurant/deleteRestaurantById/${id}`);
+                await axios.delete(`https://foodiedelightbackend.onrender.com/api/v1/restaurant/deleteRestaurantById/${id}`);
                 toast.success("Restaurant Deleted Successfully!");
                 getAllRestaurants();
             } catch (error) {
@@ -102,7 +102,7 @@ export default function Restaurant() {
         }
 
         try {
-            const response = await axios.patch(`http://localhost:4500/api/v1/restaurant/updateRestaurantById/${editId}`, formDataToSend);
+            const response = await axios.patch(`https://foodiedelightbackend.onrender.com/api/v1/restaurant/updateRestaurantById/${editId}`, formDataToSend);
             toast.success("Restaurant Update Successfully!");
             setShowEdit(false);
             getAllRestaurants();
@@ -116,7 +116,7 @@ export default function Restaurant() {
         const getData = async () => {
             if (editId) {
                 try {
-                    const res = await axios.get(`http://localhost:4500/api/v1/restaurant/getRestaurantById/${editId}`);
+                    const res = await axios.get(`https://foodiedelightbackend.onrender.com/api/v1/restaurant/getRestaurantById/${editId}`);
                     setFormData(res.data.restaurant);
                 } catch (error) {
                     console.error(error);
